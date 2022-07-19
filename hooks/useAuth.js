@@ -1,16 +1,21 @@
 import React, {createContext, useContext} from 'react';
-import {View} from "react-native";
+import * as Google from 'expo-google-app-auth';
 
 const AuthContext = createContext({
-    //initial state of the context
-}
-
+        //initial state of the context
+    }
 )
 
-export const AuthProvider = ({ children }) => {
+export const AuthProvider = ({children}) => {
+
+const signInWithGoogle = async() => {
+    await Google.logInAsync(config)
+    //config allows us to connect to google logging
+}
+
     return (
         <AuthContext.Provider value={
-            {user: 'Ivan'}
+            {user: null}
         }>
             {children}
         </AuthContext.Provider>
