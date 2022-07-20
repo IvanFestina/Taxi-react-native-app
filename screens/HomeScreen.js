@@ -1,16 +1,31 @@
-import React from 'react';
-import {Button, Text, View} from "react-native";
-import {useNavigation} from "@react-navigation/native";
+import {SafeAreaView, Text, StyleSheet, View, Image} from "react-native";
+import tw from "tailwind-react-native-classnames";
+import {NavOptions} from "../components/NavOptions";
+import {GooglePlacesAutocomplete} from "react-native-google-places-autocomplete";
+import {GOOGLE_MAPS_APIKEY} from '@env';
 
 export const HomeScreen = () => {
 
-    const navigation = useNavigation()
-
     return (
-        <View>
-            <Text>I am the Home Screen</Text>
-            <Button title='Go to Chat Screen' onPress={() => navigation.navigate('Chat')}/>
-        </View>
-    );
-};
+        <SafeAreaView style={tw`bg-white h-full`}>
+            <View style={tw`p-5`}>
+                <Image
+                    style={{width: 100, height: 100, resizeMode: 'contain'}}
+                    source={{
+                        uri: "https:/links.papareact.com/gzs"
+                    }}/>
 
+                <GooglePlacesAutocomplete
+                    placeholder='Where From?'
+                    query={}
+                    nearbyPlacesAPI='GooglePlacesSearch'
+                    debounce={400}
+                />
+
+                <NavOptions/>
+            </View>
+        </SafeAreaView>
+    )
+}
+
+const styles = StyleSheet.create({})
