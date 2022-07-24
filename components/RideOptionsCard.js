@@ -3,6 +3,8 @@ import {FlatList, Image, SafeAreaView, Text, TouchableOpacity, View} from "react
 import tw from "tailwind-react-native-classnames";
 import {Icon} from "react-native-elements";
 import {useNavigation} from "@react-navigation/native";
+import {useSelector} from "react-redux";
+import {selectTravelTimeInformation, travelTimeInformation} from "../slices/navReducer";
 
 const data = [
     {
@@ -29,14 +31,15 @@ const data = [
 export const RideOptionsCard = () => {
     const navigation = useNavigation()
     const [selected, setSelected] = useState(null);
+    const travelTimeInformation = useSelector(selectTravelTimeInformation)
 
 
-    const itemRender = ({item: {id, title, multiplier, image}}) => {
+    const itemRender = ({item: {id, title, multiplier, image}, item}) => {
         return (
             <TouchableOpacity
                 onPress={() => setSelected(item)}
                 style={tw`flex-row justify-between items-center px-10 ${
-                id === selected?.id && 'bg-gray'}`}>
+                id === selected?.id && 'bg-gray-200'}`}>
                 <Image
                     style={{
                         width: 100,
@@ -47,7 +50,7 @@ export const RideOptionsCard = () => {
                 />
                 <View style={tw`-ml-6`}>
                     <Text style={tw`text-xl font-semibold`}>{title}</Text>
-                    <Text>Travel time...</Text>
+                    <Text>{travelTimeInformation?.duration.text} Travel Time</Text>
                 </View>
                 <Text style={tw`text-xl`}>10 USD</Text>
             </TouchableOpacity>
@@ -65,9 +68,14 @@ export const RideOptionsCard = () => {
                         type='fontawesome'/>
                 </TouchableOpacity>
                 <Text
-                    style={tw`text-center py-5 text-xl`}>Select a Ride</Text>
+                    style={tw`text-center py-5 text-xl`}>Select a Ride - {travelTimeInformation?.distance.text}</Text>
             </View>
             <FlatList data={data} renderItem={itemRender} keyExtractor={item => item.id}/>
+        <View>
+        <TouchableOpacity disabled={!selected} style={tw`bg-black py-3 m-3 ${!selected && 'bg-gray-300'}`}>
+            <Text style={tw`text-center text-white text-xl`}>Choose {selected?.title}</Text>
+        </TouchableOpacity>
+        </View>
         </SafeAreaView>
     );
 };
