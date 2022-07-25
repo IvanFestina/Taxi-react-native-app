@@ -38,11 +38,9 @@ export const Map = () => {
         if (!origin || !destination) return
         const getTravelTime = () => {
             fetch(
-                `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${origin.description}&destinations=${destination.description}&units=imperial&key=${GOOGLE_MAPS_APIKEY}`)
-                .then(res => {
-                    console.log(JSON.stringify(`this is JSON.stringify ${res}`))
-                    return JSON.stringify(res)
-                })
+                `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${origin.description}
+                &destinations=${destination.description}&units=imperial&key=${GOOGLE_MAPS_APIKEY}`)
+                .then(res => res.json())
                 .then(data => {
                     console.log(`this is ${data}`)
                     dispatch(setTravelTimeInformation(data.rows[0].elements[0]))

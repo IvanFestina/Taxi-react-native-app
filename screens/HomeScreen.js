@@ -3,12 +3,14 @@ import tw from "tailwind-react-native-classnames";
 import {NavOptions} from "../components/NavOptions";
 import {GooglePlacesAutocomplete} from "react-native-google-places-autocomplete";
 import {GOOGLE_MAPS_APIKEY} from '@env';
-import {useDispatch} from "react-redux";
-import {setDestination, setOrigin} from "../slices/navReducer";
+import {useDispatch, useSelector} from "react-redux";
+import {selectPredefinedPlaces, setDestination, setOrigin} from "../slices/navReducer";
 import {NavFavorites} from "../components/NavFavorites";
 
 export const HomeScreen = () => {
     const dispatch = useDispatch()
+    const predefinedPlaces = useSelector(selectPredefinedPlaces)
+
 
     return (
         <SafeAreaView style={tw`bg-white h-full`}>
@@ -34,6 +36,7 @@ export const HomeScreen = () => {
                         }))
                         dispatch(setDestination(null))
                     }}
+                    predefinedPlaces={[predefinedPlaces]}
                     fetchDetails={true}
                     returnKeyType={'search'}
                     enablePoweredByContainer={false}

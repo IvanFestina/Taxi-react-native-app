@@ -3,8 +3,8 @@ import {SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from "react-nati
 import tw from "tailwind-react-native-classnames";
 import {GooglePlacesAutocomplete} from "react-native-google-places-autocomplete";
 import {GOOGLE_MAPS_APIKEY} from '@env';
-import {useDispatch} from "react-redux";
-import {setDestination} from "../slices/navReducer";
+import {useDispatch, useSelector} from "react-redux";
+import {selectPredefinedPlaces, setDestination} from "../slices/navReducer";
 import {useNavigation} from "@react-navigation/native";
 import {RideOptionsCard} from "./RideOptionsCard";
 import {NavFavorites} from "./NavFavorites";
@@ -13,7 +13,9 @@ import {Icon} from "react-native-elements";
 export const NavigateCard = () => {
     const dispatch = useDispatch()
     const navigation = useNavigation()
-    const [predefinedPlaces, setPredefinedPlaces] = useState(null)
+    const predefinedPlaces = useSelector(selectPredefinedPlaces)
+
+    console.log(`this is predefinedPlaces`, predefinedPlaces)
 
     return (
         <SafeAreaView style={tw`bg-white flex-1`}>
@@ -45,7 +47,7 @@ export const NavigateCard = () => {
                         }}
                     />
                 </View>
-                <NavFavorites setPredefinedPlaces={setPredefinedPlaces}/>
+                <NavFavorites/>
             </View>
             <View style={tw`flex-row bg-white justify-evenly py-2 mt-auto border-t border-gray-100`}>
                 <TouchableOpacity
