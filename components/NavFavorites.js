@@ -22,19 +22,22 @@ const data = [
     },
 ];
 
-export const NavFavorites = () => {
+export const NavFavorites = ({},ref) => {
     const dispatch = useDispatch()
 
+
     const setPredefinedPlacesHandler = (data) => {
-        console.log(`we are in setPredefinedPlacesHandler `, data)
+        // console.log(`we are in setPredefinedPlacesHandler `, data)
         dispatch(setPredefinedPlaces(data))
+
+        ref?.current?.setAddressText(data.destination);
     }
 
     const renderItem = ({item: {destination, icon, geometry, location}}) => {
         return (
             <TouchableOpacity
                 onPress={() => {
-                console.log('i am in TouchableOpacity')
+                    console.log('i am in TouchableOpacity')
                     setPredefinedPlacesHandler({
                         description: destination,
                         geometry: geometry

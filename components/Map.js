@@ -24,7 +24,7 @@ export const Map = () => {
         })
     }
     const origin = useSelector(selectOrigin)
-    const destination = useSelector((selectDestination))
+    const destination = useSelector(selectDestination)
     const mapRef = useRef(null)
     const dispatch = useDispatch()
 
@@ -36,18 +36,18 @@ export const Map = () => {
 
     useEffect(() => {
         if (!origin || !destination) return
-        const getTravelTime = () => {
+        // const getTravelTime = () => {
             fetch(
                 `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${origin.description}
                 &destinations=${destination.description}&units=imperial&key=${GOOGLE_MAPS_APIKEY}`)
                 .then(res => res.json())
                 .then(data => {
-                    console.log(`this is ${data}`)
+                    console.log(`this is data from res.json()`, data)
                     dispatch(setTravelTimeInformation(data.rows[0].elements[0]))
                 })
-                .catch(error => console.log(`this is error: ${error}`))
-        };
-        getTravelTime()
+                .catch(error => console.log(`this is error:`, error))
+        // };
+         // getTravelTime()
     }, [origin, destination, GOOGLE_MAPS_APIKEY])
     return (
         <MapView

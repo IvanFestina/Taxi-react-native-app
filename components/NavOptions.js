@@ -35,7 +35,7 @@ export const NavOptions = () => {
                 onPress={() => {
                     navigation.navigate(item.screen)
                 }}
-                style={tw`p-2 pl-6 pb-8 pt-4 bg-gray-200 m-2 w-40`}
+                style={tw`p-2 pl-6 pb-8 pt-4 bg-yellow-50 m-2 w-40`}
                 disabled={!origin}
             >
                 <View style={!origin && tw`opacity-20`}>

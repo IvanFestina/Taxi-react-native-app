@@ -4,7 +4,13 @@ import tw from "tailwind-react-native-classnames";
 import {Icon} from "react-native-elements";
 import {useNavigation} from "@react-navigation/native";
 import {useSelector} from "react-redux";
-import {selectTravelTimeInformation, travelTimeInformation} from "../slices/navReducer";
+import {
+    selectDestination,
+    selectOrigin,
+    selectTravelTimeInformation
+} from "../slices/navReducer";
+import 'intl';
+import 'intl/locale-data/jsonp/en'
 
 const data = [
     {
@@ -27,19 +33,25 @@ const data = [
     },
 ]
 
+const SURGE_CHARGE_RATE = 1.5
+
 
 export const RideOptionsCard = () => {
     const navigation = useNavigation()
     const [selected, setSelected] = useState(null);
     const travelTimeInformation = useSelector(selectTravelTimeInformation)
+    const origin = useSelector(selectOrigin)
+    const destination = useSelector(selectDestination)
 
+
+    console.log(`this is RideOptionCards travelTimeInformation`, travelTimeInformation)
 
     const itemRender = ({item: {id, title, multiplier, image}, item}) => {
         return (
             <TouchableOpacity
                 onPress={() => setSelected(item)}
                 style={tw`flex-row justify-between items-center px-10 ${
-                id === selected?.id && 'bg-gray-200'}`}>
+                    id === selected?.id && 'bg-gray-200'}`}>
                 <Image
                     style={{
                         width: 100,
@@ -52,7 +64,19 @@ export const RideOptionsCard = () => {
                     <Text style={tw`text-xl font-semibold`}>{title}</Text>
                     <Text>{travelTimeInformation?.duration.text} Travel Time</Text>
                 </View>
-                <Text style={tw`text-xl`}>10 USD</Text>
+                {origin && destination &&
+                <Text style={tw`text-xl`}>
+                    {new Intl.NumberFormat('en-gb', {
+                        style: 'currency',
+                        currency: 'EUR'
+                    }).format(
+                        (travelTimeInformation?.duration.value *
+                            SURGE_CHARGE_RATE *
+                            multiplier) / 100
+                    )}
+
+                </Text>}
+
             </TouchableOpacity>
         )
     }
@@ -68,14 +92,19 @@ export const RideOptionsCard = () => {
                         type='fontawesome'/>
                 </TouchableOpacity>
                 <Text
-                    style={tw`text-center py-5 text-xl`}>Select a Ride - {travelTimeInformation?.distance.text}</Text>
+                    style={tw`text-center py-5 text-xl`}>Select a Ride
+                    - {travelTimeInformation?.distance.text}</Text>
             </View>
+
             <FlatList data={data} renderItem={itemRender} keyExtractor={item => item.id}/>
-        <View>
-        <TouchableOpacity disabled={!selected} style={tw`bg-black py-3 m-3 ${!selected && 'bg-gray-300'}`}>
-            <Text style={tw`text-center text-white text-xl`}>Choose {selected?.title}</Text>
-        </TouchableOpacity>
-        </View>
+
+            <View style={tw`mt-auto border-t border-gray-200`}>
+                <TouchableOpacity disabled={!selected}
+                                  style={tw`bg-black py-3 m-3 ${!selected && 'bg-gray-300'}`}>
+                    <Text
+                        style={tw`text-center text-white text-xl`}>Choose {selected?.title}</Text>
+                </TouchableOpacity>
+            </View>
         </SafeAreaView>
     );
 };

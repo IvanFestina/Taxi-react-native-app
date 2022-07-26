@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import tw from "tailwind-react-native-classnames";
 import {GooglePlacesAutocomplete} from "react-native-google-places-autocomplete";
@@ -14,15 +14,17 @@ export const NavigateCard = () => {
     const dispatch = useDispatch()
     const navigation = useNavigation()
     const predefinedPlaces = useSelector(selectPredefinedPlaces)
+        const ref = useRef()
 
     console.log(`this is predefinedPlaces`, predefinedPlaces)
 
     return (
         <SafeAreaView style={tw`bg-white flex-1`}>
-            <Text style={tw`text-center py-5 text-xl`}>Good Morning</Text>
+            <Text style={tw`text-center py-5 text-xl`}>Good day!</Text>
             <View style={tw`border-t border-gray-200 flex-shrink`}>
                 <View>
                     <GooglePlacesAutocomplete
+                        ref={ref}
                         placeholder='Where to?'
                         debounce={400}
                         nearbyPlacesAPI={"GooglePlacesSearch"}
@@ -45,6 +47,18 @@ export const NavigateCard = () => {
                             )
                             navigation.navigate(RideOptionsCard)
                         }}
+                        renderRightButton={() => {
+                        return (
+                            <TouchableOpacity onPress={() => ref.current?.clear()}>
+                                <Icon
+                                    style={tw`mt-2 ml-2`}
+                                    name='close-circle-outline'
+                                    type='ionicon'
+                                    color='gray'
+                                    size={30}
+                                />
+                            </TouchableOpacity>)
+                    }}
                     />
                 </View>
                 <NavFavorites/>
