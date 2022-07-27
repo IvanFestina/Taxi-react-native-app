@@ -3,7 +3,6 @@ import {FlatList, Text, TouchableOpacity, View} from "react-native";
 import {Icon} from "react-native-elements";
 import tw from "tailwind-react-native-classnames";
 import {useDispatch} from "react-redux";
-import {setPredefinedPlaces} from "../slices/navReducer";
 
 const data = [
     {
@@ -22,23 +21,26 @@ const data = [
     },
 ];
 
-export const NavFavorites = ({},ref) => {
+export const NavFavorites = ({action}) => {
     const dispatch = useDispatch()
 
 
-    const setPredefinedPlacesHandler = (data) => {
-        // console.log(`we are in setPredefinedPlacesHandler `, data)
-        dispatch(setPredefinedPlaces(data))
-
-        ref?.current?.setAddressText(data.destination);
+    const setInputValueHandler = (data) => {
+        dispatch(action(data.description))
+        console.log('i am in setInputValueHandler')
     }
+    // const setPredefinedPlacesHandler = (data) => {
+    // console.log(`we are in setPredefinedPlacesHandler `, data)
+    // dispatch(setPredefinedPlaces(data))
+    //console.log('ref', ref)
+    // }
 
     const renderItem = ({item: {destination, icon, geometry, location}}) => {
         return (
             <TouchableOpacity
                 onPress={() => {
                     console.log('i am in TouchableOpacity')
-                    setPredefinedPlacesHandler({
+                    setInputValueHandler({
                         description: destination,
                         geometry: geometry
                     })

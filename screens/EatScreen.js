@@ -9,15 +9,17 @@ export const EatScreen = () => {
     const navigation = useNavigation()
 
     return (
-        <View>
+        <View style={tw`flex-1 justify-center`}>
             <TouchableOpacity
                 style={tw`bg-gray-100 absolute top-16 left-8 z-50 p-3
              rounded-full shadow-lg`}
-                onPress={() => {navigation.navigate('HomeScreen')}}
-            >
+                onPress={() => {
+                    navigation.navigate('HomeScreen')
+                }}>
                 <Icon name='menu'/>
             </TouchableOpacity>
-            <Text style={tw`text-center py-5 text-xl`}>Sorry, this page is under maintenance</Text>
+            <Text style={tw`text-center text-xl font-semibold`}>Sorry, this page is under
+                maintenance</Text>
         </View>
     );
 };

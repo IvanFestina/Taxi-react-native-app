@@ -4,7 +4,9 @@ const initialState = {
     origin: null,
     destination: null,
     travelTimeInformation: null,
-    predefinedPlaces: null
+    predefinedPlaces: null,
+    navCardInput: '',
+    homeScreenInput: ''
 }
 
 export const navSlice = createSlice({
@@ -22,17 +24,25 @@ export const navSlice = createSlice({
         },
         setPredefinedPlaces: (state, action) => {
             state.predefinedPlaces = action.payload
-        }
+        },
+        setNavCardInputValue: (state, action) => {
+            state.navCardInput = action.payload
+        },
+        setHomeScreenInputValue: (state, action) => {
+            state.homeScreenInput = action.payload
+        },
     }
 })
 
-export const {setOrigin, setDestination, setTravelTimeInformation, setPredefinedPlaces} = navSlice.actions
+export const {setOrigin, setDestination, setTravelTimeInformation, setPredefinedPlaces, setNavCardInputValue, setHomeScreenInputValue} = navSlice.actions
 
 // Selectors
 export const selectOrigin = (state) => state.nav.origin
 export const selectDestination = (state) => state.nav.destination
 export const selectTravelTimeInformation = (state) => state.nav.travelTimeInformation
 export const selectPredefinedPlaces = (state) => state.nav.predefinedPlaces
+export const selectNavCardInputValue = (state) => state.nav.navCardInput
+export const selectHomeScreenInput = (state) => state.nav.homeScreenInput
 
 
 export default navSlice.reducer

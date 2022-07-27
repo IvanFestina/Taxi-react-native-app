@@ -4,17 +4,30 @@ import {NavOptions} from "../components/NavOptions";
 import {GooglePlacesAutocomplete} from "react-native-google-places-autocomplete";
 import {GOOGLE_MAPS_APIKEY} from '@env';
 import {useDispatch, useSelector} from "react-redux";
-import {selectPredefinedPlaces, setDestination, setOrigin} from "../slices/navReducer";
+import {
+    selectHomeScreenInput,
+    selectPredefinedPlaces,
+    setDestination,
+    setHomeScreenInputValue,
+    setOrigin
+} from "../slices/navReducer";
 import {NavFavorites} from "../components/NavFavorites";
 import TAXI from '../assets/TAXI.png'
 import {Icon} from "react-native-elements";
-import React, {useRef} from "react";
-import {clear} from "react-native/Libraries/LogBox/Data/LogBoxData";
+import React, {useCallback, useEffect, useRef, useState} from "react";
+import {useFocusEffect} from "@react-navigation/native";
 
 export const HomeScreen = () => {
     const dispatch = useDispatch()
     const predefinedPlaces = useSelector(selectPredefinedPlaces)
+    const homeScreenInput = useSelector(selectHomeScreenInput)
+
     const ref = useRef()
+    const [value, setValue] = useState(homeScreenInput)
+    useEffect(() => {
+        setValue(homeScreenInput)
+        ref.current?.setAddressText(homeScreenInput)
+    }, [homeScreenInput])
 
     return (
         <SafeAreaView style={tw`bg-white h-full mt-6`}>
@@ -28,9 +41,12 @@ export const HomeScreen = () => {
                         resizeMode: 'contain'
                     }}
                     source={TAXI}/>
-
                 <GooglePlacesAutocomplete
                     ref={ref}
+                    textInputProps={{
+                        value,
+                        onChangeText: (e) => dispatch(setHomeScreenInputValue(e))
+                    }}
                     placeholder='Where From?'
                     minLength={2}
                     query={{
@@ -45,7 +61,7 @@ export const HomeScreen = () => {
                         }))
                         dispatch(setDestination(null))
                     }}
-                    predefinedPlaces={[predefinedPlaces]}
+                    // predefinedPlaces={[predefinedPlaces]}
                     predefinedPlacesAlwaysVisible={true}
                     fetchDetails={true}
                     returnKeyType={'search'}
@@ -64,12 +80,15 @@ export const HomeScreen = () => {
                                 />
                             </TouchableOpacity>)
                     }}
-                    styles={{container: {flex: 0, marginTop: 30}, textInput: {fontSize: 18}}}
-
+                    styles={{
+                        container: {flex: 0, marginTop: 30},
+                        textInput: {fontSize: 18}
+                    }}
+                    value={'bla'}
                 />
 
                 <NavOptions/>
-                <NavFavorites ref={ref}/>
+                <NavFavorites action={setHomeScreenInputValue}/>
             </View>
         </SafeAreaView>
     )

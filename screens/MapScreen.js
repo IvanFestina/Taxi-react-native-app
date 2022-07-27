@@ -12,12 +12,15 @@ export const MapScreen = () => {
     const Stack = createNativeStackNavigator();
     const navigation = useNavigation()
 
+
     return (
         <View>
             <TouchableOpacity
                 style={tw`bg-gray-100 absolute top-16 left-8 z-50 p-3
              rounded-full shadow-lg`}
-                onPress={() => {navigation.navigate('HomeScreen')}}
+                onPress={() => {
+                    navigation.navigate('HomeScreen')
+                }}
             >
                 <Icon name='menu'/>
             </TouchableOpacity>
