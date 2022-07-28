@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import tw from "tailwind-react-native-classnames";
 import {GooglePlacesAutocomplete} from "react-native-google-places-autocomplete";
@@ -6,8 +6,7 @@ import {GOOGLE_MAPS_APIKEY} from '@env';
 import {useDispatch, useSelector} from "react-redux";
 import {
     selectNavCardInputValue,
-    selectPredefinedPlaces,
-    setDestination,
+    setDestination, setIsDestinationReady,
     setNavCardInputValue
 } from "../slices/navReducer";
 import {useNavigation} from "@react-navigation/native";
@@ -18,17 +17,18 @@ import {Icon} from "react-native-elements";
 export const NavigateCard = () => {
     const dispatch = useDispatch()
     const navigation = useNavigation()
-    const predefinedPlaces = useSelector(selectPredefinedPlaces)
     const navCardInput = useSelector(selectNavCardInputValue)
 
     const ref = useRef()
-
+    const [value, setValue] = useState(navCardInput)
+    useEffect(() => {
+        setValue(navCardInput)
+        ref.current?.setAddressText(navCardInput)
+    }, [navCardInput])
 
     // const handleTextInput = (e) => {
     //     setText(e.currentTarget.value)
     // }
-
-    console.log(`this is predefinedPlaces`, predefinedPlaces)
 
     return (
         <SafeAreaView style={tw`bg-white flex-1`}>
@@ -38,29 +38,28 @@ export const NavigateCard = () => {
                     <GooglePlacesAutocomplete
                         ref={ref}
                         textInputProps={{
-                            value: navCardInput,
+                            value: value,
                             onChangeText: (e) => dispatch(setNavCardInputValue(e))
                         }}
-
                         placeholder='Where to?'
                         debounce={400}
-                        nearbyPlacesAPI={"GooglePlacesSearch"}
+                        minLength={2}
+                        nearbyPlacesAPI="GooglePlacesSearch"
                         styles={toInputBoxStyles}
-                        fetchDetails={true}
+                        fetchDetails
                         returnKeyType={'search'}
                         enablePoweredByContainer={false}
-                        minLength={2}
-                        predefinedPlaces={[predefinedPlaces]}
                         query={{
                             key: GOOGLE_MAPS_APIKEY,
                             language: 'en'
                         }}
                         onPress={(data, details = null) => {
+                            console.log('You pressed GooglePlacesAutocomplete in Navigate Card, destination dispatched')
                             dispatch(
                                 setDestination({
                                     location: details.geometry.location,
                                     description: data.description
-                                })
+                                }),
                             )
                             navigation.navigate(RideOptionsCard)
                         }}

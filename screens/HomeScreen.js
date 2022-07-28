@@ -6,7 +6,6 @@ import {GOOGLE_MAPS_APIKEY} from '@env';
 import {useDispatch, useSelector} from "react-redux";
 import {
     selectHomeScreenInput,
-    selectPredefinedPlaces,
     setDestination,
     setHomeScreenInputValue,
     setOrigin
@@ -14,12 +13,10 @@ import {
 import {NavFavorites} from "../components/NavFavorites";
 import TAXI from '../assets/TAXI.png'
 import {Icon} from "react-native-elements";
-import React, {useCallback, useEffect, useRef, useState} from "react";
-import {useFocusEffect} from "@react-navigation/native";
+import React, {useEffect, useRef, useState} from "react";
 
 export const HomeScreen = () => {
     const dispatch = useDispatch()
-    const predefinedPlaces = useSelector(selectPredefinedPlaces)
     const homeScreenInput = useSelector(selectHomeScreenInput)
 
     const ref = useRef()
@@ -48,7 +45,12 @@ export const HomeScreen = () => {
                         onChangeText: (e) => dispatch(setHomeScreenInputValue(e))
                     }}
                     placeholder='Where From?'
+                    debounce={400}
                     minLength={2}
+                    fetchDetails
+                    returnKeyType={'search'}
+                    enablePoweredByContainer={false}
+                    nearbyPlacesAPI='GooglePlacesSearch'
                     query={{
                         key: GOOGLE_MAPS_APIKEY,
                         language: "en"
@@ -61,13 +63,7 @@ export const HomeScreen = () => {
                         }))
                         dispatch(setDestination(null))
                     }}
-                    // predefinedPlaces={[predefinedPlaces]}
-                    predefinedPlacesAlwaysVisible={true}
-                    fetchDetails={true}
-                    returnKeyType={'search'}
-                    enablePoweredByContainer={false}
-                    nearbyPlacesAPI='GooglePlacesSearch'
-                    debounce={400}
+
                     renderRightButton={() => {
                         return (
                             <TouchableOpacity onPress={() => ref.current?.clear()}>
@@ -84,7 +80,6 @@ export const HomeScreen = () => {
                         container: {flex: 0, marginTop: 30},
                         textInput: {fontSize: 18}
                     }}
-                    value={'bla'}
                 />
 
                 <NavOptions/>
