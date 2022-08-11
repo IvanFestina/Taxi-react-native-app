@@ -4,7 +4,6 @@ const initialState = {
     origin: null,
     destination: null,
     travelTimeInformation: null,
-    // predefinedPlaces: null,
     navCardInput: '',
     homeScreenInput: '',
     isDestinationReady: false
