@@ -22,9 +22,6 @@ export const navSlice = createSlice({
         setTravelTimeInformation: (state, action) => {
             state.travelTimeInformation = action.payload
         },
-        // setPredefinedPlaces: (state, action) => {
-        //     state.predefinedPlaces = action.payload
-        // },
         setNavCardInputValue: (state, action) => {
             state.navCardInput = action.payload
         },
